@@ -19,7 +19,13 @@ Problem 3:
 Sample solution is about 1~7 lines.
 """
 
-# def discount_cumsum(x, discount_rate):
+def discount_cumsum(x, discount_rate):
     # YOUR CODE HERE >>>>>>
-    # return ???
+    reward_accum = 0
+    rt = np.zeros(x.shape)
+    for k, v in reversed(list(enumerate(x))):
+        reward_accum = v + discount_rate * reward_accum
+        rt[k] = reward_accum
+        #print 'k = ' , k
+    return x
     # <<<<<<<<

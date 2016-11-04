@@ -3,7 +3,7 @@ import numpy as np
 
 class CategoricalPolicy(object):
     def __init__(self, in_dim, out_dim, hidden_dim, optimizer, session):
-
+        
         # Placeholder Inputs
         self._observations = tf.placeholder(tf.float32, shape=[None, in_dim], name="observations")
         self._actions = tf.placeholder(tf.int32, name="actions")
@@ -27,7 +27,14 @@ class CategoricalPolicy(object):
         Sample solution is about 2~4 lines.
         """
         # YOUR CODE HERE >>>>>>
-        # probs = ???
+        W1 = tf.Variable(tf.random_normal([in_dim, hidden_dim]))
+        b1 = tf.Variable(tf.zeros([hidden_dim]))
+        W2 = tf.Variable(tf.random_normal([hidden_dim, out_dim]))
+        b2 = tf.Variable(tf.zeros([out_dim]))
+        fc_1 = tf.tanh(tf.add(tf.matmul(self._observations, W1), b1))
+        fc_2 = tf.add(tf.matmul(fc_1, W2), b2)
+        probs = tf.nn.softmax(fc_2)
+
         # <<<<<<<<
 
         # --------------------------------------------------
@@ -69,7 +76,7 @@ class CategoricalPolicy(object):
         Sample solution is about 1~3 lines.
         """
         # YOUR CODE HERE >>>>>>
-        # surr_loss = ???
+        surr_loss = -tf.reduce_mean(tf.mul(log_prob, self._advantages))
         # <<<<<<<<
 
         grads_and_vars = self._opt.compute_gradients(surr_loss)
